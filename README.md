@@ -18,9 +18,13 @@ Esse não é um sistema online e seu processamento leva algumas horas para o pro
 
 $ python recommender.py ratings.csv pearson [3374,673] userBased
 
-python – nome do interpretador
-recommender.py – nome do seu aplicativo Python (nome do script)
-ratings.csv – nome do arquivo comos ratings dos usuários
-pearson – medida de similaridade (pode ser ainda cosine ou Jaccard e o script está preparado para executar com uma das 3 medidas)
-[3374,673] - Lista UserID : MovieID para teste indivual (passando o valor null é executado para todos os dados)
-userBased - Tipo de técnica utilizada para recomendação (pode ser ainda: itemBased ou userItemBased)
+- python – nome do interpretador
+- recommender.py – nome do seu aplicativo Python (nome do script)
+- ratings.csv – nome do arquivo comos ratings dos usuários
+- pearson – medida de similaridade (pode ser ainda cosine ou Jaccard e o script está preparado para executar com uma das 3 medidas)
+- [3374,673] - Lista UserID : MovieID para teste indivual (passando o valor null é executado para todos os dados)
+- userBased - Tipo de técnica utilizada para recomendação (pode ser ainda: itemBased ou userItemBased)
+
+# TO DO:
+
+- Finalizar a implementação da técnica userItemBased.
