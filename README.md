@@ -28,3 +28,4 @@ $ python recommender.py ratings.csv pearson [3374,673] userBased
 # TO DO:
 
 - Finalizar a implementação da técnica userItemBased.
+- Listar Top 10 Filmes para recomendação baseado em userBased, ItemBased e userItemBased.
