@@ -1,0 +1,22 @@
+Aqui está o dicionário de dados com a explicação sobre cada arquivo:
+
+http://files.grouplens.org/datasets/movielens/ml-1m-README.txt
+
+movies.csv = movies.dat
+	MovieID::Title::Genres
+	
+ratings.csv = ratings.dat
+	UserID::MovieID::Rating::Timestamp
+
+users.csv = users.dat
+	UserID::Gender::Age::Occupation::Zip-code
+	
+toBeRated.csv = o que deve ser apresentado a previsão (recomendação)
+	UserID::MovieID
+	
+userBasedRecomendationsResult.txt = Resultado do Rank (0 até 5) da avaliação de outros usuários para sugestão do filme para esse usuário.
+	UserID::MovieID::Rating
+	
+itemBasedRecomendationsResult.txt = Resultado do Rank (0 até 5) da recomendação do filme para o usuário baseado na correlação entre os filmes que o usuário já assistiu e no rating de avalição para esses filmes;
+	UserID::MovieID::Rating
+	
