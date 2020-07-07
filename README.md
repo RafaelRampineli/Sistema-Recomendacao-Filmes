@@ -25,11 +25,15 @@ $ python recommender.py ratings.csv pearson [3374,673] userBased
 - [3374,673] - Lista UserID : MovieID para teste indivual (passando o valor null é executado para todos os dados)
 - userBased - Tipo de técnica utilizada para recomendação (pode ser ainda: itemBased ou userItemBased)
 
+$ python recommender.py Top10MoviesItemBased '' 2173 ''
+
+- python – nome do interpretador
+- recommender.py – nome do seu aplicativo Python (nome do script)
+- Top10MoviesItemBased - Listagem baseada na avaliação por item (pode ser Top10MoviesUserBased)
+- '' - Vazio pois não precisamos da medida de similaridade.
+- 2173 - UserID que desejamos trazer a relação top 10 (valor = 0 trará TOP 10 Geral).
+- '' - Vazio pois não precisamos do Tipo de técnica.
+
 # TO DO:
 
 - Finalizar a implementação da técnica userItemBased.
-
-# IMPROVEMENT:
-
-- Unificar um Output de recomendações com o nome dos filmes.
-- Listar Top 10 Filmes para recomendação baseado em userBased, ItemBased e userItemBased.
