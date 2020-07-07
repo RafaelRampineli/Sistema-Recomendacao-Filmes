@@ -82,6 +82,27 @@ def MapUserMovies(rating):
 	# 					   }
 	return userRatings
 
+def load_userDataset(userFile):
+
+	user_data = csv.reader(userFile)
+	userList = list(user_data)
+	userList = sorted(userList, key=operator.itemgetter(0))
+
+	return userList
+
+
+def get_info_users(userID, userList):
+	for u in userList:
+		user = u[0]
+		Sex = u[1]
+		Age = u[2]
+
+		if int(user) == int(userID):
+			break;
+
+	return user, Sex, Age
+
+
 
 # Mapeando cada filme avaliado por usuários e transformando o userRatings para item based  
 def transposeRankings(ratings):
@@ -228,6 +249,9 @@ def similarItems(ratings, similarity):
 def userBasedRecommendations(ratings, wantedPredictions, similarity):
 	file = open('userBasedRecomendationsResult.txt', 'a')
 
+	# Recupera o dataset de usuários somente uma única vez, fora do loop para otimização
+	userlist = load_userDataset(open('users.csv'))
+
 	for tuple in wantedPredictions:
 		user = tuple[0]
 		movieAsked = tuple[1]
@@ -236,12 +260,23 @@ def userBasedRecommendations(ratings, wantedPredictions, similarity):
 		total = {}
 		similaritySums = {}
 
+		usuID, Sex, Idade = get_info_users(user, userlist)
+
+		control = -1
+
 		# Percorre a chave (que é o UserID) do dict
 		for second_person in ratings:
 			# Se os usuários forem iguais, pula para o proximo usuário do FOR.
 			# Instrução continue interrompe a execução do ciclo e avança para o próximo item da execução
 			if second_person == user:
 				continue
+
+			# Aplica o controle de similaridade somente comparando usuários que possuem a mesma faixa de idade e sexo.
+			if second_person != control:
+				second_usuID, second_Sex, second_Idade = get_info_users(second_person, userlist)
+				control = second_person
+				if Sex != second_Sex or Idade != second_Idade:
+					continue
 
 			s = similarity(ratings, user, second_person)
 
