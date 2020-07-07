@@ -9,10 +9,17 @@ from sklearn import model_selection
 from sys import argv
 
 
+# Carrega datset CSV
+def load_Dataset(Filename):
+	data_opened = open(Filename)
+	data = csv.reader(data_opened)
+	data_list = list(data)
+
+	return data_list
+
 # Mapeamento por Filmes
 def MapMoviesUser(rating):
-	ratings_data = csv.reader(rating)
-	listData = list(ratings_data)
+	listData = load_Dataset(rating)
 
 	MovieRatings = {}
 
@@ -48,8 +55,7 @@ def MapMoviesUser(rating):
 
 # Mapeamento por Usuário
 def MapUserMovies(rating):
-	ratings_data = csv.reader(rating)
-	listData = list(ratings_data)
+	listData = load_Dataset(rating)
 
 	userRatings = {}
 
@@ -82,15 +88,8 @@ def MapUserMovies(rating):
 	# 					   }
 	return userRatings
 
-def load_userDataset(userFile):
 
-	user_data = csv.reader(userFile)
-	userList = list(user_data)
-	userList = sorted(userList, key=operator.itemgetter(0))
-
-	return userList
-
-
+# Recupera informações do usuário
 def get_info_users(userID, userList):
 	for u in userList:
 		user = u[0]
@@ -102,6 +101,27 @@ def get_info_users(userID, userList):
 
 	return user, Sex, Age
 
+
+def ListTop10Movie(dataset_list, userID):
+	dataset_loaded = load_Dataset(dataset_list)
+
+	Movie_dataset = load_Dataset('movies.csv')
+
+	dataset_loaded = sorted(dataset_loaded, key=operator.itemgetter(2))
+	dataset_loaded.reverse()
+
+	var_control = 0
+
+	for i in dataset_loaded:
+		user = i[0]
+		movie = i[1]
+		rating = i[2]
+
+		if int(user) == int(userID) or int(userID) == 0:
+			for i2 in Movie_dataset:
+				if movie == i2[0] and var_control < 10:
+					print(i2[1], i2[2], '###', rating)
+					var_control += 1
 
 
 # Mapeando cada filme avaliado por usuários e transformando o userRatings para item based  
@@ -247,10 +267,11 @@ def similarItems(ratings, similarity):
 
 # Recomendações para um usuário, com base no peso dos ratings de outros usuário
 def userBasedRecommendations(ratings, wantedPredictions, similarity):
-	file = open('userBasedRecomendationsResult.txt', 'a')
+	file = open('userBasedRecomendationsResult.csv', 'a')
 
 	# Recupera o dataset de usuários somente uma única vez, fora do loop para otimização
-	userlist = load_userDataset(open('users.csv'))
+	userlist = load_Dataset('users.csv')
+	userList = sorted(userlist, key=operator.itemgetter(0))
 
 	for tuple in wantedPredictions:
 		user = tuple[0]
@@ -297,7 +318,7 @@ def userBasedRecommendations(ratings, wantedPredictions, similarity):
 
 # Recomendações para um usuário, com base no peso dos ratings dado pelo próprio usuário em filmes correlacionados
 def itemBasedRecommendations(ratings, wantedPredictions, similarity):
-	file = open('itemBasedRecomendationsResult.txt', 'a')
+	file = open('itemBasedRecomendationsResult.csv', 'a')
 
 	itemsRatings = transposeRankings(ratings)
 
@@ -381,6 +402,13 @@ def mainFunction():
 	Movie = argv[3]
 	KindOfRecommendation = argv[4]
 
+	if fileName == 'Top10MoviesUserBased':
+		ListTop10Movie('userBasedRecomendationsResult.csv', Movie)
+		return;
+	elif fileName == 'Top10MoviesItemBased':
+		ListTop10Movie('itemBasedRecomendationsResult.csv', Movie)
+		return;
+
 	if Movie == 'null':
 		MovieSuggest = ''
 	else:
@@ -389,13 +417,11 @@ def mainFunction():
 	print("#######################################################################")
 	print("#### Aplicando o mapeamento de UserID-Movie-Rating ####")
 	print("#######################################################################\n")
-	userRatings = MapUserMovies(open(fileName))
+	userRatings = MapUserMovies(fileName)
 
 	# Dados que deverão ser sugeridos Filmes
 	if MovieSuggest == '':
-		f1 = open("toBeRated.csv")
-		toBeRated = csv.reader(f1)
-		wantedPredictions = list(toBeRated)
+		wantedPredictions = load_Dataset("toBeRated.csv")
 	else:
 		wantedPredictions = []
 		wantedPredictions.append(MovieSuggest)
